@@ -1,0 +1,45 @@
+<form [formGroup]="multiStepForms" (ngSubmit)="submit()">
+  <mat-horizontal-stepper [linear]="isLinear" #stepper>
+    <mat-step
+      *ngFor="let step of steps; let index = index; let last = last"
+      [stepControl]="getFormGroup(step.controlName)!"
+    >
+      <ng-template matStepLabel>{{ step.label }} </ng-template>
+      <formly-form
+        *ngIf="getFormGroup(step.controlName) as formGroup"
+        [form]="formGroup"
+        [fields]="step.fields"
+      >
+      </formly-form>
+
+      <div class="button-container">
+        <button
+          *ngIf="index !== 0"
+          mat-raised-button
+          color="primary"
+          matStepperPrevious
+        >
+          Back
+        </button>
+        <button
+          *ngIf="!last"
+          mat-raised-button
+          color="primary"
+          matStepperNext
+          [disabled]="!getFormGroup(step.controlName)?.valid"
+        >
+          Next
+        </button>
+        <button
+          *ngIf="last"
+          mat-raised-button
+          color="accent"
+          type="submit"
+          [disabled]="!multiStepForms.valid"
+        >
+          Submit
+        </button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</form>
