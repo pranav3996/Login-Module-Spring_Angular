@@ -13,15 +13,13 @@ import { environment } from 'src/environments/environment';
 export class AuthService {
   private LOGIN_URL = environment.AUTH_URL + '/login';
   private REFRESH_URL = environment.AUTH_URL + '/refresh';
-  private inactivityTime: number = 300000; // 5 minutes
   private activityTimeout: any;
-  private refreshTokenTimeout: any;
 
   refreshTokenInProgress = false;
   refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient, private router: Router) {
-
+    this.startInactivityListener();
   }
 
   login(email: string, password: string): Observable<any> {
@@ -105,5 +103,46 @@ export class AuthService {
     );
   }
 
+ 
+  public updateInactivityTime(expirationRefreshTokenTime: string): void {
+    const expirationTime = moment(expirationRefreshTokenTime, 'ddd MMM DD HH:mm:ss zz YYYY').toDate().getTime();
+    const currentTime = new Date().getTime();
+    const inactivityTime = expirationTime - currentTime;
+   
+    if (inactivityTime > 0) {
+      this.resetActivityTimeout(inactivityTime);
+    } else {
+      this.logOut();
+    }
+  }
 
+  private resetActivityTimeout(inactivityTime: number): void {
+    if (this.activityTimeout) {
+      clearTimeout(this.activityTimeout);
+    }
+    this.activityTimeout = setTimeout(() => {
+      this.logOut();
+    }, inactivityTime);
+  }
+
+  private startInactivityListener(): void {
+    ['mousemove', 'keydown', 'click'].forEach(event => {
+      window.addEventListener(event, () => this.resetActivityTimeoutFromStorage());
+    });
+  }
+
+  private resetActivityTimeoutFromStorage(): void {
+    const expirationRefreshTokenTime = localStorage.getItem('expirationRefreshTokenTime');
+    if (expirationRefreshTokenTime) {
+      const expirationTime = moment(expirationRefreshTokenTime, 'ddd MMM DD HH:mm:ss zz YYYY').toDate().getTime();
+      const currentTime = new Date().getTime();
+      const inactivityTime = expirationTime - currentTime;
+
+      if (inactivityTime > 0) {
+        this.resetActivityTimeout(inactivityTime);
+      } else {
+        this.logOut();
+      }
+    }
+  }
 }

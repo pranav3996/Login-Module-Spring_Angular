@@ -36,7 +36,7 @@ export class LoginComponent {
       
           this.router.navigate(['/profile']);
           this.authService.setLogoutTimer(expirationAccessTokenTime);
-          // this.authService.updateInactivityTime(expirationRefreshTokenTime);
+           this.authService.updateInactivityTime(expirationRefreshTokenTime);
       
           
         } else {
