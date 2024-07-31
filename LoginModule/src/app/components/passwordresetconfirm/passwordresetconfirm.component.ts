@@ -20,7 +20,7 @@ export class PasswordresetconfirmComponent implements OnInit {
     private readonly passwordService: PasswordService
   ) { }
 
-  token: string = '';
+  accessToken: string = '';
   newPassword: string = '';
   errorMessage: string = '';
   // for navigation using queryParams
@@ -28,14 +28,14 @@ export class PasswordresetconfirmComponent implements OnInit {
   // otp: string = '';
 
   ngOnInit(): void {
-    this.token = this.route.snapshot.queryParams['token'];
+    this.accessToken = this.route.snapshot.queryParams['accessToken'];
     // Getting a data from navigation and using queryParams
     // this.email = this.route.snapshot.queryParams['email'];
     // this.otp = this.route.snapshot.queryParams['otp'];
   }
 
   resetPassword(resetPasswordForm:NgForm) {
-    this.passwordService.resetPassword(this.token, resetPasswordForm.value.newPassword)
+    this.passwordService.resetPassword(this.accessToken, resetPasswordForm.value.newPassword)
       .subscribe(
         () => {
           Swal.fire({

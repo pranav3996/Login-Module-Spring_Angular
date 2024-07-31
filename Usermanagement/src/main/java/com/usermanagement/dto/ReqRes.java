@@ -15,9 +15,10 @@ public class ReqRes {
     private int statusCode;
     private String error;
     private String message;
-    private String token;
+    private String accessToken;
     private String refreshToken;
-    private String expirationTime;
+    private String expirationAccessTokenTime;
+    private String expirationRefreshTokenTime;
     private String firstName;
     private String lastName;
     private String city;
@@ -50,6 +51,12 @@ public class ReqRes {
 	public int getStatusCode() {
 		return statusCode;
 	}
+	public String getExpirationRefreshTokenTime() {
+		return expirationRefreshTokenTime;
+	}
+	public void setExpirationRefreshTokenTime(String expirationRefreshTokenTime) {
+		this.expirationRefreshTokenTime = expirationRefreshTokenTime;
+	}
 	public void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
 	}
@@ -65,11 +72,11 @@ public class ReqRes {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public String getToken() {
-		return token;
+	public String getAccessToken() {
+		return accessToken;
 	}
-	public void setToken(String token) {
-		this.token = token;
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 	public String getRefreshToken() {
 		return refreshToken;
@@ -77,11 +84,11 @@ public class ReqRes {
 	public void setRefreshToken(String refreshToken) {
 		this.refreshToken = refreshToken;
 	}
-	public String getExpirationTime() {
-		return expirationTime;
+	public String getExpirationAccessTokenTime() {
+		return expirationAccessTokenTime;
 	}
-	public void setExpirationTime(String expirationTime) {
-		this.expirationTime = expirationTime;
+	public void setExpirationAccessTokenTime(String expirationAccessTokenTime) {
+		this.expirationAccessTokenTime = expirationAccessTokenTime;
 	}
 	
 	public String getCity() {
@@ -120,13 +127,40 @@ public class ReqRes {
 	public void setUsersList(List<Users> usersList) {
 		this.usersList = usersList;
 	}
+	public ReqRes(int statusCode, String error, String message, String accessToken, String refreshToken,
+			String expirationAccessTokenTime, String expirationRefreshTokenTime, String firstName, String lastName, String city,
+			String role, String email, String password, Users users, List<Users> usersList, boolean isAdmin) {
+		super();
+		this.statusCode = statusCode;
+		this.error = error;
+		this.message = message;
+		this.accessToken = accessToken;
+		this.refreshToken = refreshToken;
+		this.expirationAccessTokenTime = expirationAccessTokenTime;
+		this.expirationRefreshTokenTime = expirationRefreshTokenTime;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.city = city;
+		this.role = role;
+		this.email = email;
+		this.password = password;
+		this.users = users;
+		this.usersList = usersList;
+		this.isAdmin = isAdmin;
+	}
+	public ReqRes() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	@Override
 	public String toString() {
-		return "ReqRes [statusCode=" + statusCode + ", error=" + error + ", message=" + message + ", token=" + token
-				+ ", refreshToken=" + refreshToken + ", expirationTime=" + expirationTime + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", isAdmin=" + isAdmin + ", city=" + city + ", role=" + role + ", email="
-				+ email + ", password=" + password + ", users=" + users + ", usersList=" + usersList + "]";
+		return "ReqRes [statusCode=" + statusCode + ", error=" + error + ", message=" + message + ", accessToken=" + accessToken
+				+ ", refreshToken=" + refreshToken + ", expirationAccessTokenTime=" + expirationAccessTokenTime
+				+ ", expirationRefreshTokenTime=" + expirationRefreshTokenTime + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", city=" + city + ", role=" + role + ", email=" + email + ", password="
+				+ password + ", users=" + users + ", usersList=" + usersList + ", isAdmin=" + isAdmin + "]";
 	}
+
     
 
 }

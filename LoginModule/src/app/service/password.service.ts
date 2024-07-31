@@ -17,8 +17,8 @@ export class PasswordService {
     return this.http.post<any>(url, { email });
   }
 
-  resetPassword(token: string, newPassword: string): Observable<any> {
-    const url = `${this.BASE_URL}/reset-password?token=${token}`;
+  resetPassword(accessToken: string, newPassword: string): Observable<any> {
+    const url = `${this.BASE_URL}/reset-password?token=${accessToken}`;
     return this.http.post<any>(url, { newPassword });
   }
 

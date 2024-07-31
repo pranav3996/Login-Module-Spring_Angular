@@ -26,16 +26,17 @@ export class LoginComponent {
     this.authService.login(authForm.value.email, authForm.value.password).subscribe(
       response => {
         if (response.statusCode === 200) {
-          const { expirationTime } = response;
-          localStorage.setItem('token', response.token);
+          const { expirationAccessTokenTime ,expirationRefreshTokenTime} = response;
+          localStorage.setItem('accessToken', response.accessToken);
           localStorage.setItem('role', response.role);
           localStorage.setItem('email', response.email);
           localStorage.setItem('refreshToken', response.refreshToken);
 
-          console.log('Expiration Date ' + expirationTime);
-
+          console.log('Expiration Date ' + expirationAccessTokenTime);
+      
           this.router.navigate(['/profile']);
-          this.authService.setLogoutTimer(expirationTime);
+          this.authService.setLogoutTimer(expirationAccessTokenTime);
+          // this.authService.updateInactivityTime(expirationRefreshTokenTime);
       
           
         } else {
