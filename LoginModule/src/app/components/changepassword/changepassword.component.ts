@@ -30,7 +30,11 @@ export class ChangepasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userEmail = localStorage.getItem('email') || '';
+    // this.userEmail = localStorage.getItem('email') || '';
+    // this.changePasswordForm.patchValue({
+    //   email: this.userEmail,
+    // });
+    this.userEmail = sessionStorage.getItem('email') || '';
     this.changePasswordForm.patchValue({
       email: this.userEmail,
     });

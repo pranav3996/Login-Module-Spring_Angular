@@ -28,27 +28,27 @@ export class AuthService {
   }
 
   logOut(): void {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('role');
-    localStorage.removeItem('email');
-    localStorage.removeItem('expirationAccessTokenTime');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('expirationRefreshTokenTime');
+
+     //localStorage.clear();
+    sessionStorage.clear();
     this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {
-    const accessToken = localStorage.getItem('accessToken');
+     // const accessToken = localStorage.getItem('accessToken');
+  const accessToken = sessionStorage.getItem('accessToken');
     return !!accessToken;
   }
 
   isAdmin(): boolean {
-    const role = localStorage.getItem('role');
+     // const role = localStorage.getItem('role');
+  const role = sessionStorage.getItem('role');
     return role === 'ADMIN';
   }
 
   isUser(): boolean {
-    const role = localStorage.getItem('role');
+      //const role = localStorage.getItem('role');
+   const role = sessionStorage.getItem('role');
     return role === 'USER';
   }
 
@@ -70,7 +70,8 @@ export class AuthService {
   }
 
   refreshToken(): Observable<any> {
-    const refreshToken = localStorage.getItem('refreshToken');
+      //const refreshToken = localStorage.getItem('refreshToken');
+  const refreshToken = sessionStorage.getItem('refreshToken');
     if (!refreshToken) {
       console.error('No refresh token found in local storage.');
       this.logOut();
@@ -83,10 +84,14 @@ export class AuthService {
       tap((response) => {
         console.log('Refresh Token Response:', response);
         if (response && response.accessToken) {
-          localStorage.setItem('accessToken', response.accessToken);
-          localStorage.setItem('expirationAccessTokenTime',response.expirationAccessTokenTime);
-          localStorage.setItem('refreshToken', response.refreshToken);
-          localStorage.setItem('expirationRefreshTokenTime', response.expirationRefreshTokenTime);
+          // localStorage.setItem('accessToken', response.accessToken);
+          // localStorage.setItem('expirationAccessTokenTime',response.expirationAccessTokenTime);
+          // localStorage.setItem('refreshToken', response.refreshToken);
+          // localStorage.setItem('expirationRefreshTokenTime', response.expirationRefreshTokenTime);
+          sessionStorage.setItem('accessToken', response.accessToken);
+          sessionStorage.setItem('expirationAccessTokenTime', response.expirationAccessTokenTime);
+          sessionStorage.setItem('refreshToken', response.refreshToken);
+          sessionStorage.setItem('expirationRefreshTokenTime', response.expirationRefreshTokenTime);  
           console.log('New access token expiration time:', response.expirationAccessTokenTime);
         } else {
           this.logOut();
@@ -132,7 +137,8 @@ export class AuthService {
   }
 
   private resetActivityTimeoutFromStorage(): void {
-    const expirationRefreshTokenTime = localStorage.getItem('expirationRefreshTokenTime');
+     //  const expirationRefreshTokenTime = localStorage.getItem('expirationRefreshTokenTime');
+   const expirationRefreshTokenTime = sessionStorage.getItem('expirationRefreshTokenTime');
     if (expirationRefreshTokenTime) {
       const expirationTime = moment(expirationRefreshTokenTime, 'ddd MMM DD HH:mm:ss zz YYYY').toDate().getTime();
       const currentTime = new Date().getTime();

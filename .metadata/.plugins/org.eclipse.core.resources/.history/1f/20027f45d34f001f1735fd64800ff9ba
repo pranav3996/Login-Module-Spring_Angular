@@ -97,6 +97,11 @@ public class JWTUtils {
 	public Date extractExpiration(String token) {
 		return extractClaims(token, Claims::getExpiration);
 	}
-
+//	public boolean isRefreshTokenExpired(String token) {
+//	    return extractClaims(token, Claims::getExpiration).before(new Date());
+//	}
+//    public Date extractRefreshTokenExpiration(String token) {
+//        return extractClaims(token, Claims::getExpiration);
+//    }
 
 }

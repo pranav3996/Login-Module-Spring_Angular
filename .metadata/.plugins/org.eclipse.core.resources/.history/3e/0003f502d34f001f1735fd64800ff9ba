@@ -112,7 +112,7 @@ public class UserManagementService {
 
 			String jwtToken = jwtUtils.generateToken(userDetails);
 
-			Date tokenExpiration = jwtUtils.extractExpiration(jwtToken);
+			Date accessTokenExpiration = jwtUtils.extractExpiration(jwtToken);
 
 			Optional<Users> optionalUser = usersRepo.findByEmail(userDetails.getUsername());
 
@@ -120,16 +120,18 @@ public class UserManagementService {
 			if (optionalUser.isPresent()) {
 				Users user = optionalUser.get(); // Extract the Users object from Optional
 				var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
+				Date refreshTokenExpiration = jwtUtils.extractExpiration(refreshToken);
 				// Assuming role is a single value, convert it into a List<String>
 				List<String> roles = Collections.singletonList(user.getRole());
 
 				ReqRes response = new ReqRes();
 				response.setEmail(userDetails.getUsername());
-				response.setRole(String.join(",", roles)); // Convert roles to a comma-separated string if needed
-				response.setToken(jwtToken); // Replace jwtToken with your token generation logic
-				response.setRefreshToken(refreshToken);
 				response.setStatusCode(200);
-				response.setExpirationTime(tokenExpiration.toString());
+				response.setRole(String.join(",", roles)); // Convert roles to a comma-separated string if needed
+				response.setAccessToken(jwtToken); // Replace jwtToken with your token generation logic
+				response.setExpirationAccessTokenTime(accessTokenExpiration.toString());
+				response.setRefreshToken(refreshToken);
+				response.setExpirationRefreshTokenTime(refreshTokenExpiration.toString());
 				response.setAdmin(user.getRole().equalsIgnoreCase("ADMIN"));
 				response.setMessage("Successfully Logged In");
 				System.out.println("Login response"+response);
@@ -169,15 +171,18 @@ public class UserManagementService {
 			System.out.println("refresh token ourEmail "+users);
 			if (jwtUtils.isTokenValid(refreshTokenRequest.getRefreshToken(), users)) {
 				String newJwtToken = jwtUtils.generateToken(users);
-				Date newTokenExpiration = jwtUtils.extractExpiration(newJwtToken);
+				Date newAccessTokenExpiration = jwtUtils.extractExpiration(newJwtToken);
 
 				var newRefreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), users);
+				Date newRefreshTokenExpiration = jwtUtils.extractExpiration(newRefreshToken);
 				System.out.println("new refreshToken"+newRefreshToken);
 				response.setStatusCode(200);
-				response.setToken(newJwtToken);
+				response.setAccessToken(newJwtToken);
+				response.setExpirationAccessTokenTime(newAccessTokenExpiration.toString());
 //				response.setRefreshToken(refreshTokenRequest.getRefreshToken());
 				response.setRefreshToken(newRefreshToken);
-				response.setExpirationTime(newTokenExpiration.toString());
+			
+				response.setExpirationRefreshTokenTime(newRefreshTokenExpiration.toString());
 				response.setAdmin(users.getRole().equalsIgnoreCase("ADMIN"));
 				response.setMessage("Successfully Refreshed Token");
 				System.out.println("Refresh response"+response);

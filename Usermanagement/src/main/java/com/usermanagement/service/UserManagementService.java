@@ -134,7 +134,7 @@ public class UserManagementService {
 				response.setExpirationRefreshTokenTime(refreshTokenExpiration.toString());
 				response.setAdmin(user.getRole().equalsIgnoreCase("ADMIN"));
 				response.setMessage("Successfully Logged In");
-				System.out.println("Login response"+response);
+			
 
 				return response;
 			} else {
@@ -166,9 +166,9 @@ public class UserManagementService {
 
 		try {
 			String ourEmail = jwtUtils.extractUsername(refreshTokenRequest.getRefreshToken());
-			System.out.println("refresh token ourEmail "+ourEmail);
+		
 			Users users = usersRepo.findByEmail(ourEmail).orElseThrow(() -> new RuntimeException("User Not found with email " + ourEmail));
-			System.out.println("refresh token ourEmail "+users);
+		
 			if (jwtUtils.isTokenValid(refreshTokenRequest.getRefreshToken(), users)) {
 				String newJwtToken = jwtUtils.generateToken(users);
 				Date newAccessTokenExpiration = jwtUtils.extractExpiration(newJwtToken);

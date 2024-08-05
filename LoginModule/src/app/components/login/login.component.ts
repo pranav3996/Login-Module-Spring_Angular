@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/service/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  
   public isLogin = true;
   email: string = '';
   password: string = '';
@@ -22,15 +23,18 @@ export class LoginComponent {
       return;
     }
 
-    
     this.authService.login(authForm.value.email, authForm.value.password).subscribe(
       response => {
         if (response.statusCode === 200) {
           const { expirationAccessTokenTime ,expirationRefreshTokenTime} = response;
-          localStorage.setItem('accessToken', response.accessToken);
-          localStorage.setItem('role', response.role);
-          localStorage.setItem('email', response.email);
-          localStorage.setItem('refreshToken', response.refreshToken);
+          // localStorage.setItem('accessToken', response.accessToken);
+          // localStorage.setItem('role', response.role);
+          // localStorage.setItem('email', response.email);
+          // localStorage.setItem('refreshToken', response.refreshToken);
+          sessionStorage.setItem('accessToken', response.accessToken);
+         sessionStorage.setItem('role', response.role);
+           sessionStorage.setItem('email', response.email);
+          sessionStorage.setItem('refreshToken', response.refreshToken);
 
           console.log('Expiration Date ' + expirationAccessTokenTime);
       
@@ -75,3 +79,4 @@ export class LoginComponent {
     return '';
   }
 }
+

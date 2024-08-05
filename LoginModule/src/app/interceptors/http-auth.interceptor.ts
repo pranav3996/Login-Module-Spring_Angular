@@ -1,18 +1,16 @@
-
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { AuthService } from '../service/auth.service';
-import * as moment from 'moment';
 
 @Injectable()
 export class HttpAuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const accessToken = localStorage.getItem('accessToken');
-
+        // const accessToken = localStorage.getItem('accessToken');
+ const accessToken = sessionStorage.getItem('accessToken');
     console.log('Intercepting request to:', req.url);
 
     if (accessToken) {
@@ -48,8 +46,8 @@ export class HttpAuthInterceptor implements HttpInterceptor {
           this.authService.refreshTokenSubject.next(response.accessToken);
 
           if (response && response.accessToken) {
-            localStorage.setItem('accessToken', response.accessToken);
-           
+                // localStorage.setItem('accessToken', response.accessToken); 
+          sessionStorage.setItem('accessToken', response.accessToken); 
             const expirationAccessTokenTime = response.expirationAccessTokenTime;
             this.authService.setLogoutTimer(expirationAccessTokenTime);
           }
